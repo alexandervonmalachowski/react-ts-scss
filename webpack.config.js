@@ -15,6 +15,7 @@ const appPublic = 'public';
 module.exports = (env) => {
   const { ifProd, ifNotProd } = getIfUtils(env);
   return {
+    stats: 'minimal',
     cache: ifProd(),
     mode: ifProd('production', 'development'),
     entry: removeEmpty({
@@ -46,7 +47,7 @@ module.exports = (env) => {
       modules: [resolve(__dirname, 'src'), resolve(__dirname, 'node_modules')],
     },
     output: {
-      pathinfo: true,
+      pathinfo: ifNotProd(),
       chunkFilename: ifProd(
         'static/js/[name].[contenthash].js',
         'static/js/[name].js'
@@ -86,7 +87,10 @@ module.exports = (env) => {
                 sourceMap: ifNotProd(),
               },
             },
-            ifProd({ loader: 'postcss-loader', options: { sourceMap: false } }),
+            {
+              loader: 'postcss-loader',
+              options: { sourceMap: ifNotProd() },
+            },
             {
               loader: 'sass-loader',
               options: {
