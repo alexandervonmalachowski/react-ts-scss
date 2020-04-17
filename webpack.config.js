@@ -65,13 +65,6 @@ module.exports = (env) => {
           exclude: /node_modules/,
           use: {
             loader: 'babel-loader',
-            options: {
-              presets: [
-                '@babel/preset-env',
-                '@babel/preset-react',
-                '@babel/preset-typescript',
-              ],
-            },
           },
         },
         {
@@ -82,12 +75,10 @@ module.exports = (env) => {
             {
               loader: 'css-loader?-minimize',
               options: {
+                localsConvention: 'asIs',
                 modules: {
                   mode: 'local',
-                  localIdentName: ifNotProd(
-                    '[name]__[local]--[hash:base64:5]',
-                    '[hash:base64:5]'
-                  ),
+                  localIdentName: ifNotProd('[local]', '[hash:base64:5]'),
                   context: resolve(__dirname, 'src'),
                   hashPrefix: ifNotProd('development', 'production'),
                 },
